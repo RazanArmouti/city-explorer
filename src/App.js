@@ -3,83 +3,72 @@ import './App.css';
 import Location from './components/Location';
 import SearchForm from './components/SearchForm';
 import axios from 'axios';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 
 export class App extends Component {
-  constructor(props){
+  constructor(props) {
     super(props);
-    this.state={
-      city_name:"",
-      type:"",
-      lat:"",
-      lon:"",
-      showData:false
+    this.state = {
+      city_name: "",
+    
+      lat: "",
+      lon: "",
+      showData: false,
+      showModal: false
     }
   }
-  handleLocation=(e)=>{
-    let city_name=e.target.value;
+  handleClose = () => {
     this.setState({
-      city_name:city_name
+      showModal: false
     })
   }
-  handleSubmit=(e)=>{
-    console.log(`${process.env.REACT_APP_LOCATIONIQ_API_KEY}`);
-    e.preventDefault();
-    console.log(`https://us1.locationiq.com/v1/search.php?key=${process.env.REACT_APP_LOCATIONIQ_API_KEY}&q=${this.state.city_name}&format=json`);
-    console.log(`https://api.locationiq.com/v1/autocomplete.php?key=${process.env.REACT_APP_LOCATIONIQ_API_KEY}&q=${this.state.city_name}`);
-    axios.get(`https://us1.locationiq.com/v1/search.php?key=${process.env.REACT_APP_LOCATIONIQ_API_KEY}&q=${this.state.city_name}&format=json`).then((response) => {
-      console.log('Everything is awesome.');
-      let responseData=response.data[0]
+  
+    handleLocation = (e) => {
+      let city_name = e.target.value;
+      this.setState({
+        city_name: city_name
+      })
+    }
+    handleSubmit = (e) => {
+      e.preventDefault();
+      axios.get(`https://us1.locationiq.com/v1/search.php?key=${process.env.REACT_APP_LOCATIONIQ_API_KEY}&q=${this.state.city_name}&format=json`).then((response) => {
+        console.log('Everything is awesome.');
+        let responseData = response.data[0]
         this.setState({
-          city_name:responseData.display_name,
-          lon:responseData.lon,
-          lat:responseData.lat,
-          type:responseData.type,
-          showData:true
-  
-        })
-  }).catch((error) => {
-      console.warn('Not good man :(');
-  })
-    // let config={
-    //   method:"GET",
-    //   baseURL:`https://api.locationiq.com/v1/autocomplete.php?key=${process.env.REACT_APP_LOCATIONIQ_API_KEY}&q=${this.state.city_name}`
-    // }
-  
-    
-    // axios(config).then(res=>{
-    //   let responseData=res.data[0]
-    //   this.setState({
-    //     city_name:responseData.display_name,
-    //     lon:responseData.lon,
-    //     lat:responseData.lat,
-    //     type:responseData.type,
-    //     showData:true
+          city_name: responseData.display_name,
+          lon: responseData.lon,
+          lat: responseData.lat,
+          
+          showData: true,
+          showModal: true
 
-    //   })
-    //   console.log('Everything is awesome.');
-    // }).catch((error) => {
-    //   console.warn('Not good man :('); 
-    // })
+        })
+      }).catch((error) => {
+        console.warn('Not good man :(');
+      })
+
+    }
+
+    render(){
+      return (
+        <div>
+          <h1>Welcome to City explorer</h1>
+          <SearchForm handleLocation={this.handleLocation} handleSubmit={this.handleSubmit} />
+          {
+            this.state.showData &&
+            <Location handleClose={this.handleClose} 
+                      showModal={this.state.showModal} 
+                      city_name={this.state.city_name}
+                      
+                      lat={this.state.lat}
+                      lon={this.state.lon}/>
+          }
+
+        </div>
+      )
+    }
   }
-  
-  render() {
-    return (
-      <div>
-        <h1>Welcome to City explorer</h1>
-        <SearchForm handleLocation={this.handleLocation} handleSubmit={this.handleSubmit}/>
-        {
-          this.state.showData&&
-          <Location city_name={this.state.city_name}
-                    type={this.state.type}
-                    lat={this.state.lat}
-                    lon={this.state.lon}
-          />
-        }
-        
-      </div>
-    )
-  }
-}
+
 
 export default App
