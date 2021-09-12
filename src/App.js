@@ -25,22 +25,44 @@ export class App extends Component {
   handleSubmit=(e)=>{
     console.log(`${process.env.REACT_APP_LOCATIONIQ_API_KEY}`);
     e.preventDefault();
-    let config={
-      method:"GET",
-      baseURL:`https://api.locationiq.com/v1/autocomplete.php?key=${process.env.REACT_APP_LOCATIONIQ_API_KEY}&q=${this.state.city_name}`
-    }
-    axios(config).then(res=>{
-      let responseData=res.data[0]
-      this.setState({
-        city_name:responseData.display_name,
-        lon:responseData.lon,
-        lat:responseData.lat,
-        type:responseData.type,
-        showData:true
+    console.log(`https://us1.locationiq.com/v1/search.php?key=${process.env.REACT_APP_LOCATIONIQ_API_KEY}&q=${this.state.city_name}&format=json`);
+    console.log(`https://api.locationiq.com/v1/autocomplete.php?key=${process.env.REACT_APP_LOCATIONIQ_API_KEY}&q=${this.state.city_name}`);
+    axios.get(`https://us1.locationiq.com/v1/search.php?key=${process.env.REACT_APP_LOCATIONIQ_API_KEY}&q=${this.state.city_name}&format=json`).then((response) => {
+      console.log('Everything is awesome.');
+      let responseData=response.data[0]
+        this.setState({
+          city_name:responseData.display_name,
+          lon:responseData.lon,
+          lat:responseData.lat,
+          type:responseData.type,
+          showData:true
+  
+        })
+  }).catch((error) => {
+      console.warn('Not good man :(');
+  })
+    // let config={
+    //   method:"GET",
+    //   baseURL:`https://api.locationiq.com/v1/autocomplete.php?key=${process.env.REACT_APP_LOCATIONIQ_API_KEY}&q=${this.state.city_name}`
+    // }
+  
+    
+    // axios(config).then(res=>{
+    //   let responseData=res.data[0]
+    //   this.setState({
+    //     city_name:responseData.display_name,
+    //     lon:responseData.lon,
+    //     lat:responseData.lat,
+    //     type:responseData.type,
+    //     showData:true
 
-      })
-    })
+    //   })
+    //   console.log('Everything is awesome.');
+    // }).catch((error) => {
+    //   console.warn('Not good man :('); 
+    // })
   }
+  
   render() {
     return (
       <div>

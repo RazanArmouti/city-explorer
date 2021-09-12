@@ -9,7 +9,7 @@ export class SearchForm extends Component {
                         placeholder="Please enter a city name..."
                         onChange={this.props.handleLocation}
                         />
-                <input type="submit" value="Search"/>
+                <input type="submit" value="Explore!"/>
             </form>
         </div>
         )
