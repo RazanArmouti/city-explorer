@@ -20,7 +20,6 @@ export class App extends Component {
       showModal: false,
       zoom: 0,
       msg:false,
-      weather:[],
       date:"",
       description:""
 
