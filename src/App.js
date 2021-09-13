@@ -4,7 +4,8 @@ import Location from './components/Location';
 import SearchForm from './components/SearchForm';
 import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Alert, Button} from 'react-bootstrap'
+import { Alert, Button} from 'react-bootstrap';
+import Weather from './components/Weather';
 
 
 export class App extends Component {
@@ -18,7 +19,10 @@ export class App extends Component {
       showData: false,
       showModal: false,
       zoom: 0,
-      msg:false
+      msg:false,
+      weather:[],
+      date:"",
+      description:""
 
     }
   }
@@ -53,6 +57,15 @@ export class App extends Component {
 
       })
       console.log(this.state.MapLoc);
+    }).then(()=>{
+      let cityArr=[];
+      cityArr=this.state.city_name.split(',');
+    axios.get(`http//:${process.env.REACT_APP_BACKEND_URL}/weather?searchQuery=${cityArr[0]}&lat=${parseFloat(this.state.lat).toFixed(2)}&lon=${parseFloat(this.state.lon).toFixed(2)}`)
+    .then((res=>{
+      console.log(res.data);     
+     
+    }))
+    
     }).catch((error) => {
       console.warn('city location - Not good man :(');
       this.setState({
@@ -65,7 +78,6 @@ export class App extends Component {
 
 
     })
-
 
     function AlertDismissibleExample() {
       const [show, setShow] = this.useState(true);
@@ -84,27 +96,7 @@ export class App extends Component {
     }
 
   }
-  // handleMap = (e) => {
-  //   e.preventDefault();
-  //   axios.get(`https://maps.locationiq.com/v3/staticmap?key=${process.env.REACT_APP_LOCATIONIQ_API_KEY}
-  //   &center=${this.state.lat},${this.state.lon}&zoom=10`).then((res)=>{
-  //     console.log('inside map- Everything is awesome.');
-  //     let responseData = res.data[0]
-  //     this.setState({
-  //       city_name: responseData.display_name,
-  //       lon: responseData.lon,
-  //       lat: responseData.lat,
-  //       zoom:13,
-  //       showData: true,
-  //       showModal: true
 
-  //     })
-
-  //   }).catch((error)=>{
-  //     console.warn('inside map- Not good man :(');
-  //   })
-
-  // }
 
   render() {
     return (
@@ -112,18 +104,30 @@ export class App extends Component {
         <h1>Welcome to City explorer</h1>
         <SearchForm handleLocation={this.handleLocation} handleSubmit={this.handleSubmit} />
         {
+          
+       this.state.weather.forEach(item=>{
+         console.log( 'hi')
+        this.setState({
+          date:item.data,
+          description:item.description
+        })
+      })
+     }
+        {
           this.state.showData &&
           <Location handleClose={this.handleClose}
             showModal={this.state.showModal}
             city_name={this.state.city_name}
             MapLoc={this.state.MapLoc}
             lat={this.state.lat}
-            lon={this.state.lon} />
+            lon={this.state.lon} 
+            date={this.state.date} 
+               description={this.state.description} />
 
 
         }
-        
-       
+      
+    
       </>
     )
   }
