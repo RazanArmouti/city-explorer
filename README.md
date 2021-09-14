@@ -36,6 +36,16 @@ React.JS, bootstrap, API, axios
 
 * Actual time needed to complete:10 hours
 
+## Feature #2: APIs
+* Number and name of feature: Feature #2: APIs
+* Estimate of time needed to complete: 5:00
+
+* Start time: 8pm
+
+* Finish time: 2:30am
+
+* Actual time needed to complete:7 hours
+
 # Data flow
 ![dataflow](./src/components/dataflow.png)
 
