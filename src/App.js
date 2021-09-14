@@ -6,6 +6,7 @@ import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import AlertMsg from './components/AlertMsg';
 import Weather from './components/Weather';
+import Movie from './components/Movie';
 
 
 class App extends Component {
@@ -23,7 +24,15 @@ class App extends Component {
       date: "",
       description: "",
       ShowErrorAlert: false,
-      weather: []
+      weather: [],
+      movie:[],
+      title:'',
+      overview:'',
+      average_votes:0,
+      total_votes:0,
+      image_url:'',
+      popularity:0,
+      released_on:''
 
     }
   }
@@ -61,12 +70,24 @@ class App extends Component {
     }).then(() => {
      
       axios.get(`http://${process.env.REACT_APP_BACKEND_URL}/weather?lat=${this.state.lat}&lon=${this.state.lon}`).then((serverResponse => {
-        console.log('inside the  res.data');
+        console.log('inside the  weather.data');
         console.log(serverResponse.data);
         this.setState({ weather: serverResponse.data })
      
 
-      })).catch((error) => {
+      })).then(() => {
+        let cityArr = [];
+        cityArr = this.state.city_name.split(',');
+        let index=cityArr.length-1;
+        let country=cityArr[index].replace(/ /g, "");
+        console.log(cityArr);
+        axios.get(`http://${process.env.REACT_APP_BACKEND_URL}/movies?country=${country}`).then((serverRes => {
+          console.log('inside the  country.data');
+          console.log(serverRes.data);
+          this.setState({ movie: serverRes.data })
+       
+  
+        })).catch((error) => {
         console.warn('error, talking with my server');
 
       })
@@ -81,10 +102,9 @@ class App extends Component {
 
     })
 
-
-
+   })
   }
-
+   
 
   render() {
     return (
@@ -116,6 +136,24 @@ class App extends Component {
               < Weather date={item.date}
                 description={item.description}
                 city_name={this.state.city_name}
+              />
+
+            </>
+          })
+        }
+
+{
+          this.state.movie.map(e => {
+            return <>
+
+              < Movie city_name={this.state.city_name}
+               title={e.title}
+               overview={e.overview}
+               average_votes={e.average_votes}
+               total_votes={e.total_votes}
+               image_url={e.image_url}
+               popularity={e.popularity}
+               released_on={e.released_on}
               />
 
             </>
