@@ -57,14 +57,21 @@ class App extends Component {
 
 
       })
-     
+      // console.log(this.state.MapLoc);
     }).then(() => {
-     
-      axios.get(`http://${process.env.REACT_APP_BACKEND_URL}/weather?lat=${this.state.lat}&lon=${this.state.lon}`).then((serverResponse => {
+      let cityArr = [];
+      cityArr = this.state.city_name.split(',');
+      axios.get(`http://${process.env.REACT_APP_BACKEND_URL}/weather?searchQuery=${cityArr[0]}&lat=${this.state.lat}&lon=${this.state.lon}`).then((serverResponse => {
         console.log('inside the  res.data');
         console.log(serverResponse.data);
         this.setState({ weather: serverResponse.data })
-     
+        // this.state.weather.forEach(item => {        
+        //   this.setState({
+        //     date:item.date,
+        //     description:item.description
+
+        //   })
+        //})
 
       })).catch((error) => {
         console.warn('error, talking with my server');
