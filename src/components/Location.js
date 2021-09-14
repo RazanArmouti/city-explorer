@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
 import { Modal, Button } from 'react-bootstrap'
 import Map from './Map';
-import Weather from './Weather';
-export class Location extends Component {
+
+ class Location extends Component {
     render() {
         return (
 
@@ -27,12 +27,9 @@ export class Location extends Component {
                     MapLoc={this.props.MapLoc}
                     lat={this.props.lat}
                     lon={this.props.lon} />
-
-                <Weather date={this.props.date}
-                    description={this.props.description}
-                    city_name={this.props.city_name}
-                    lat={this.props.lat}
-                    lon={this.props.lon} />
+                    <br/><br/>
+        
+                   
             </>
 
 
