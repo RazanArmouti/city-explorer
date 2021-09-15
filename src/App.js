@@ -131,10 +131,13 @@ class App extends Component {
       <>
         <h1>Welcome to City explorer</h1>
         <br />
+       
+        <SearchForm handleLocation={this.handleLocation} handleSubmit={this.handleSubmit} />
+
+        <br/>
         {
           this.state.ShowErrorAlert && <AlertMsg />
         }
-        <SearchForm handleLocation={this.handleLocation} handleSubmit={this.handleSubmit} />
 
         {
           this.state.showData &&
