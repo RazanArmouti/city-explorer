@@ -77,7 +77,7 @@ class App extends Component {
       })
 
     }).then(() => {
-      axios.get(`http://${process.env.REACT_APP_BACKEND_URL}/weather?lat=${this.state.lat}&lon=${this.state.lon}`).then((serverResponse => {
+      axios.get(`${process.env.REACT_APP_BACKEND_URL}/weather?lat=${this.state.lat}&lon=${this.state.lon}`).then((serverResponse => {
         console.log('inside the  weather.data' + serverResponse.data);
         serverResponse.data.length > 0 ? this.setState({
           weather: serverResponse.data
@@ -93,7 +93,7 @@ class App extends Component {
         let index = cityArr.length - 1;
         let country = cityArr[index].replace(/ /g, "");
         //console.log(cityArr);
-        axios.get(`http://${process.env.REACT_APP_BACKEND_URL}/movies?country=${country}`).then((serverRes => {
+        axios.get(`${process.env.REACT_APP_BACKEND_URL}/movies?country=${country}`).then((serverRes => {
 
           console.log('inside the  country.data' + serverRes.data);
           serverRes.data.length > 0 ? this.setState({
