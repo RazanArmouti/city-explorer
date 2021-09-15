@@ -5,8 +5,10 @@ import SearchForm from './components/SearchForm';
 import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import AlertMsg from './components/AlertMsg';
-import Weather from './components/Weather';
-import Movie from './components/Movie';
+import WeatherDay from './components/WeatherDay';
+
+
+import Movies from './components/Movies';
 
 
 class App extends Component {
@@ -25,14 +27,14 @@ class App extends Component {
       description: "",
       ShowErrorAlert: false,
       weather: [],
-      movie:[],
-      title:'',
-      overview:'',
-      average_votes:0,
-      total_votes:0,
-      image_url:'',
-      popularity:0,
-      released_on:''
+      movie: [],
+      title: '',
+      overview: '',
+      average_votes: 0,
+      total_votes: 0,
+      image_url: '',
+      popularity: 0,
+      released_on: ''
 
     }
   }
@@ -66,45 +68,63 @@ class App extends Component {
 
 
       })
-     
-    }).then(() => {
-     
-      axios.get(`http://${process.env.REACT_APP_BACKEND_URL}/weather?lat=${this.state.lat}&lon=${this.state.lon}`).then((serverResponse => {
-        console.log('inside the  weather.data');
-        console.log(serverResponse.data);
-        this.setState({ weather: serverResponse.data })
-     
-
-      })).then(() => {
-        let cityArr = [];
-        cityArr = this.state.city_name.split(',');
-        let index=cityArr.length-1;
-        let country=cityArr[index].replace(/ /g, "");
-        console.log(cityArr);
-        axios.get(`http://${process.env.REACT_APP_BACKEND_URL}/movies?country=${country}`).then((serverRes => {
-          console.log('inside the  country.data');
-          console.log(serverRes.data);
-          this.setState({ movie: serverRes.data })
-       
-  
-        })).catch((error) => {
-        console.warn('error, talking with my server');
-
-      })
 
     }).catch((error) => {
-      console.warn('city location - Not good man :(');
+      console.warn('error, talking with my server');
       this.setState({
         msg: true,
         ShowErrorAlert: true
       })
 
+    }).then(() => {
+      axios.get(`http://${process.env.REACT_APP_BACKEND_URL}/weather?lat=${this.state.lat}&lon=${this.state.lon}`).then((serverResponse => {
+        console.log('inside the  weather.data' + serverResponse.data);
+        serverResponse.data.length > 0 ? this.setState({
+          weather: serverResponse.data
+        }) : this.setState({
+          weatherData: []
+        })
+  
+       
+
+      })).then(() => {
+        let cityArr = [];
+        cityArr = this.state.city_name.split(',');
+        let index = cityArr.length - 1;
+        let country = cityArr[index].replace(/ /g, "");
+        //console.log(cityArr);
+        axios.get(`http://${process.env.REACT_APP_BACKEND_URL}/movies?country=${country}`).then((serverRes => {
+
+          console.log('inside the  country.data' + serverRes.data);
+          serverRes.data.length > 0 ? this.setState({
+            movie: serverRes.data
+          }) : this.setState({
+            movie: []
+          })
+
+
+        })).catch((error) => {
+          console.warn('error, talking with my server');
+          this.setState({
+            msg: true,
+            ShowErrorAlert: true
+          })
+  
+        })
+
+      }).catch((error) => {
+        console.warn('city location - Not good man :(');
+        this.setState({
+          msg: true,
+          ShowErrorAlert: true
+        })
+
+
+      })
 
     })
-
-   })
   }
-   
+
 
   render() {
     return (
@@ -133,7 +153,7 @@ class App extends Component {
           this.state.weather.map(item => {
             return <>
 
-              < Weather date={item.date}
+              < WeatherDay date={item.date}
                 description={item.description}
                 city_name={this.state.city_name}
               />
@@ -142,18 +162,19 @@ class App extends Component {
           })
         }
 
-{
+       
+        {
           this.state.movie.map(e => {
             return <>
 
-              < Movie city_name={this.state.city_name}
-               title={e.title}
-               overview={e.overview}
-               average_votes={e.average_votes}
-               total_votes={e.total_votes}
-               image_url={e.image_url}
-               popularity={e.popularity}
-               released_on={e.released_on}
+              < Movies city_name={this.state.city_name}
+                title={e.title}
+                overview={e.overview}
+                average_votes={e.average_votes}
+                total_votes={e.total_votes}
+                image_url={e.image_url}
+                popularity={e.popularity}
+                released_on={e.released_on}
               />
 
             </>

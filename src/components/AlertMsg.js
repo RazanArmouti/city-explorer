@@ -8,9 +8,9 @@ import { Alert } from 'react-bootstrap'
     
            
                 <Alert  variant="danger" dismissible>
-                  <Alert.Heading>Oh snap! You got an error!</Alert.Heading>
+                  <Alert.Heading>You got an error!</Alert.Heading>
                   <p>
-                  Kindly enter a valid location.
+                      Kindly enter a valid location.
                   </p>
                 </Alert>
             

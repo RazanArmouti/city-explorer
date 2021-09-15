@@ -46,6 +46,16 @@ React.JS, bootstrap, API, axios
 
 * Actual time needed to complete:7 hours
 
+## Feature #3: Refactoring into Modules
+* Number and name of feature: Feature #3:Refactoring into Modules
+* Estimate of time needed to complete: 5:00
+
+* Start time: 6pm
+
+* Finish time: 10pm
+
+* Actual time needed to complete:5 hours
+
 # Data flow
 ![dataflow](./src/components/dataflow.png)
 
