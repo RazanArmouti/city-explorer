@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Card } from 'react-bootstrap'
-export class Map extends Component {
+ class Map extends Component {
     render() {
         return (
             <Card style={{ width:'750px', height:'600px' ,backgroundColor:'#E7EAB5'} }>

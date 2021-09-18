@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 
-export class SearchForm extends Component {
+ class SearchForm extends Component {
     render() {
         return (
             <div>
