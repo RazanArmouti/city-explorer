@@ -9,6 +9,7 @@ import WeatherDay from './components/WeatherDay';
 
 
 import Movies from './components/Movies';
+import Restaurants from './components/Restaurants';
 
 
 class App extends Component {
@@ -27,14 +28,20 @@ class App extends Component {
       description: "",
       ShowErrorAlert: false,
       weather: [],
-      movie: [],
+      moviedata: [],
+      resturantdata: [],
       title: '',
       overview: '',
       average_votes: 0,
       total_votes: 0,
       image_url: '',
       popularity: 0,
-      released_on: ''
+      released_on: '',
+      name:'',
+      Res_image_url:'',
+      price:'',
+      rating:'',
+      url:''
 
     }
   }
@@ -77,39 +84,57 @@ class App extends Component {
       })
 
     }).then(() => {
-      axios.get(`${process.env.REACT_APP_BACKEND_URL}/weather?lat=${this.state.lat}&lon=${this.state.lon}`).then((serverResponse => {
+      axios.get(`${process.env.REACT_APP_BACKEND_URL}/weather?lat=${this.state.lat}&lon=${this.state.lon}`).then((serverResponse) => {
         console.log('inside the  weather.data' + serverResponse.data);
         serverResponse.data.length > 0 ? this.setState({
           weather: serverResponse.data
         }) : this.setState({
-          weatherData: []
+          weather: []
         })
-  
-       
 
-      })).then(() => {
+
+      }).then(() => {
         let cityArr = [];
         cityArr = this.state.city_name.split(',');
-        let index = cityArr.length - 1;
-        let country = cityArr[index].replace(/ /g, "");
+        // let index = cityArr.length - 1;
+        let cityName = cityArr[0].replace(/ /g, "");
         //console.log(cityArr);
-        axios.get(`${process.env.REACT_APP_BACKEND_URL}/movies?country=${country}`).then((serverRes => {
+        axios.get(`${process.env.REACT_APP_BACKEND_URL}/movies?query=${cityName}`).then((serverRes) => {
 
           console.log('inside the  country.data' + serverRes.data);
           serverRes.data.length > 0 ? this.setState({
-            movie: serverRes.data
+            moviedata: serverRes.data
           }) : this.setState({
-            movie: []
+            moviedata: []
           })
 
 
-        })).catch((error) => {
+        }).then(() => {
+          let cityArr = [];
+          cityArr = this.state.city_name.split(',');
+          // let index = cityArr.length - 1;
+          let cityName = cityArr[0].replace(/ /g, "");
+          axios.get(`${process.env.REACT_APP_BACKEND_URL}/yelp?location=${cityName}&lat=${this.state.lat}&lon=${this.state.lon}`).then((yelpres) => {
+            console.log('inside the  yelp.data' + yelpres.data);
+            yelpres.data.length > 0 ? this.setState({
+              resturantdata: yelpres.data
+            }) : this.setState({
+              resturantdata: []
+            })
+            // this.state.resturantdata.forEach((y) => {
+          
+            //   console.log(y.name);
+            // });
+
+          })
+
+        }).catch((error) => {
           console.warn('error, talking with my server');
           this.setState({
             msg: true,
             ShowErrorAlert: true
           })
-  
+
         })
 
       }).catch((error) => {
@@ -131,10 +156,10 @@ class App extends Component {
       <>
         <h1>Welcome to City explorer</h1>
         <br />
-       
+
         <SearchForm handleLocation={this.handleLocation} handleSubmit={this.handleSubmit} />
 
-        <br/>
+        <br />
         {
           this.state.ShowErrorAlert && <AlertMsg />
         }
@@ -165,24 +190,23 @@ class App extends Component {
           })
         }
 
+
+      
+          
+           {
+           this.state.moviedata?< Movies moviedata={this.state.moviedata}  city_name={this.state.city_name}  />:''   
+                       
+           }
        
-        {
-          this.state.movie.map(e => {
-            return <>
+        
 
-              < Movies city_name={this.state.city_name}
-                title={e.title}
-                overview={e.overview}
-                average_votes={e.average_votes}
-                total_votes={e.total_votes}
-                image_url={e.image_url}
-                popularity={e.popularity}
-                released_on={e.released_on}
-              />
 
-            </>
-          })
-        }
+          {
+              this.state.resturantdata?< Restaurants resturantdata={this.state.resturantdata} />:''
+          }
+              
+
+           
 
 
       </>

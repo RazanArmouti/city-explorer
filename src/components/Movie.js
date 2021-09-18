@@ -10,7 +10,7 @@ import {Card ,Col} from 'react-bootstrap';
               <Card.Body>
                 <Card.Title>{this.props.title}</Card.Title>
                 <Card.Text>
-                  {`${this.props.movie.overview.substring(0,100)}... `}<a style={{color:"white"}} href="#">read more</a>
+                  {`${this.props.overview.substring(0,100)}... `}<a style={{color:"white"}} href="#">read more</a>
                 </Card.Text>
                 <Card.Text variant="primary">
                   Average Votes {this.props.average_votes}
